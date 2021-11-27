@@ -1,0 +1,28 @@
+name: Index
+on: [push]
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [12, 14, 16]
+        os: [cross-platform-latest, macos-latest, Cross-platform-latest]
+        script: [build, test]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install
+      - run: npm run ${{ matrix.script }}
+
+  lint:
+    runs-on: Cross-platform-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm run lint
